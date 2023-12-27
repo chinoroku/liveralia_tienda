@@ -15,7 +15,20 @@ const routes = [
   },
   {
     path: '/shop',name:'shop',component: ()=> import('@/views/productos/IndexProductoApp.vue'),
-  }
+  },
+  {
+    path: '/producto/:slug',name:'show-producto',component: ()=> import('@/views/productos/ShowProductoApp.vue'),
+  },
+  {
+    path: '/cart',name:'cart',component: ()=> import('@/views/CarritoView.vue'),
+  },
+
+  {
+    path: '/cuenta/direcciones',name:'direcciones',component: ()=> import('@/views/cuenta/DireccionesApp.vue'),
+  },
+  {
+    path: '/checkout',name:'checkout',component: ()=> import('@/views/CheckoutView.vue'),
+  },
  
 ]
 

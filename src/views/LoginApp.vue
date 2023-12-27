@@ -4,7 +4,7 @@
             <div class="container">
                 
                 <div class="hero-content pb-5 text-center">
-                <h1 class="hero-heading mb-0">Customer zone</h1>
+                <h1 class="hero-heading mb-0">Zona de Cliente</h1>
                 </div>
             </div>
             </section>
@@ -101,7 +101,11 @@ export default {
             msm_error_login: ''
         }
     },
-
+    beforeMount(){
+        if(this.$store.state.token){
+        this.$router.push({name :'home'});
+        }
+    },
     methods: {
         validar_registro(){
             if(!this.cliente.nombres){
@@ -152,7 +156,9 @@ export default {
                         this.msm_error_login = result.data.message;
                     }else{
                          this.$store.dispatch('saveToken',result.data.token);
+                         this.$store.dispatch('saveUser',JSON.stringify(result.data.cliente));
                         this.$router.push({name: 'home'}); 
+                        this.$socket.emit('send_cart',true);
                     }
 
                 }).catch((error)=>{

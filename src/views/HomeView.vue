@@ -36,7 +36,8 @@
         <div class="row" v-if="!load_nuevos_productos">
           <!-- product-->
           <div class="col-lg-3 col-md-4 col-6" v-for="item in nuevos_productos">
-            <div class="product">
+            <RouterLink :to="{name: 'show-producto',params:{slug : item.slug}}">
+              <div class="product">
               <div class="product-image">
                 <div class="ribbon ribbon-danger" v-if="item.descuento">Oferta</div>
                 <img class="img-fluid" :src="$url+'/obtener_portada_producto/'+item.portada" alt="product"/>
@@ -52,6 +53,8 @@
                 <span class="text-muted">{{convertCurrency(item.precio)}}</span>
               </div>
             </div>
+            </RouterLink>
+            
           </div>
           <!-- /product-->
          
