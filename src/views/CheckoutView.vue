@@ -92,8 +92,8 @@
                 </div>
                 </div>
                 <div class="mb-5 d-flex justify-content-between flex-column flex-lg-row">
-                    <router-link to="/shop" class="btn btn-link text-muted">Regresar a tienda</router-link >
-                    
+                    <router-link to="/shop" class="btn btn-link text-muted" href="checkout3.html">Regresar a tienda</router-link >
+                    <a class="btn btn-dark" href="checkout5.html">Place an order</a>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -140,7 +140,7 @@
     
                 </div>
                 <div class="block-footer">
-                    <a  class="btn btn-dark" id="btnBuy" style="cursor: pointer;width: 100%;">PAGAR</a>
+                    <a  class="btn btn-dark" id="btnBuy" style="cursor: pointer;width: 100%;" v-on:click="crearPreferencia()">PAGAR</a>
                 <!--  <button class="btn btn-dark btnBuy" style="cursor: pointer" disabled>Procesando...</button> -->
                 
                 </div>
@@ -166,6 +166,7 @@
                 productos: [],
                 total: 0,
                 load_data: true,
+                items: []
             }
         },
         beforeMount() {
@@ -191,25 +192,63 @@
                 this.venta.direccion = event.target.value;
             },
             init_carrito(){
-            if(this.$store.state.token != null){
-                this.load_data = true;
-                axios.get(this.$url+'/obtener_carrito_cliente',{
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': this.$store.state.token
-                    }
-                }).then((result)=>{
-                    this.total = 0;
-                    for(var item of result.data.carrito_general){
-                        let subtotal = item.producto.precio * item.cantidad;
-                        this.total = this.total+ subtotal;
-                    }
-                    this.productos = result.data.carrito_general;
-                    this.load_data = false;
-                });
-            }
-        },
+                if(this.$store.state.token != null){
+                    this.load_data = true;
+                    axios.get(this.$url+'/obtener_carrito_cliente',{
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': this.$store.state.token
+                        }
+                    }).then((result)=>{
+                        this.total = 0;
+                        for(var item of result.data.carrito_general){
+                            let subtotal = item.producto.precio * item.cantidad;
+                            this.total = this.total+ subtotal;
 
+                            this.items.push({
+                                title: item.producto.titulo,
+                                quantity: item.cantidad,
+                                unit_price: item.producto.precio,
+                                currency_id: 'USD'
+                            });
+                        }
+
+                        this.items.push({
+                            title: 'Envio',
+                            quantity: 1,
+                            unit_price: this.$envio,
+                            currency_id: 'USD'
+                        });
+
+                        this.productos = result.data.carrito_general;
+                        this.load_data = false;
+                    });
+                }
+            },
+            crearPreferencia(){
+                let data = {
+                    back_urls: {
+                        success: 'http://localhost:8080/verificacion/success/'+this.venta.direccion,
+                        pending: 'http://localhost:8080/verificacion/pending',
+                        failure: 'http://localhost:8080/verificacion/failure'
+                    },
+                    items: this.items,
+                    auto_return: 'approved'
+                }
+
+                console.log(data);
+
+                axios.post('https://api.mercadopago.com/checkout/preferences',data,{
+                    headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer TEST-1854172631947606-122715-5e4c9dd6ba0bfc593f7fc9cb9c17c97c-332804377'
+                        }
+                }).then((result)=>{
+                    console.log(result);
+                    window.location.href = result.data.sandbox_init_point;
+
+                })
+            }
         }
     }
 </script>
