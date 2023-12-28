@@ -32,7 +32,7 @@
      </div>
    </div>
    <!-- Main block - menus, subscribe form-->
-   <div class="py-6 text-muted" style="    background-color: #005f96 !important;"> 
+   <div class="py-6 text-muted" style="    background-color: #D3A5A5 !important;"> 
      <div class="container">
        <div class="row">
          <div class="col-lg-4 mb-5 mb-lg-0">
