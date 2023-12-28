@@ -322,7 +322,7 @@ import { RouterLink } from 'vue-router';
     },
     methods: {
         convertCurrency(number) {
-            return currency_formatter.format(number, { code: 'USD' });
+            return currency_formatter.format(number, { code: 'PEN' });
         },
         setPerPage(item) {
             this.perPage = item;
