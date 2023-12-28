@@ -13,7 +13,7 @@ const socketConnection = SocketIO('http://localhost:4201');
 
 Vue.config.productionTip = false
 
-Vue.prototype.$envio = 20;
+Vue.prototype.$envio = 10;
 Vue.prototype.$paises = ['Perú'];
 
 Vue.prototype.$url = 'http://localhost:4201/api';
