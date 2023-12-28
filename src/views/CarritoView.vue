@@ -113,7 +113,7 @@ export default{
     },
     methods: {
         convertCurrency(number){
-            return currency_formatter.format(number, { code: 'PEN' });
+            return currency_formatter.format(number, { code: 'USD' });
         },
         init_carrito(){
             if(this.$store.state.token != null){

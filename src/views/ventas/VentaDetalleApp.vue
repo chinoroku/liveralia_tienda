@@ -187,7 +187,7 @@ export default {
       return moment(item).format('YYYY/MM/DD');
     },
     convertCurrency(number){
-        return currency_formatter.format(number, { code: 'PEN' });
+        return currency_formatter.format(number, { code: 'USD' });
     },
   }
 }

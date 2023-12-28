@@ -261,7 +261,7 @@ export default {
       });
     },
     convertCurrency(number){
-        return currency_formatter.format(number, { code: 'PEN' });
+        return currency_formatter.format(number, { code: 'USD' });
     }
   },
   components: {

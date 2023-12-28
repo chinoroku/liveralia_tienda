@@ -175,7 +175,7 @@
         },
         methods:{
             convertCurrency(number){
-                return currency_formatter.format(number, { code: 'PEN' });
+                return currency_formatter.format(number, { code: 'USD' });
             },
             init_direcciones(){
                 axios.get(this.$url+'/obternet_direcciones_cliente',{
@@ -209,7 +209,7 @@
                                 title: item.producto.titulo,
                                 quantity: item.cantidad,
                                 unit_price: item.producto.precio,
-                                currency_id: 'PEN'
+                                currency_id: 'USD'
                             });
                         }
 
@@ -217,7 +217,7 @@
                             title: 'Envio',
                             quantity: 1,
                             unit_price: this.$envio,
-                            currency_id: 'PEN'
+                            currency_id: 'USD'
                         });
 
                         this.productos = result.data.carrito_general;
