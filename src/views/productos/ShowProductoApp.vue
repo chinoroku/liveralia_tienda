@@ -403,10 +403,12 @@ export default {
             'Authorization': this.$store.state.token
           }
         }).then((result) => {
-         //console.log(result);
+          console.log(result);
           this.$socket.emit('send_cart', true);
           this.productos_relaciones = result.data.productos;
-
+          if(result.message!=''){
+            this.msm_error = result.message;
+          }  
         });
       }
 

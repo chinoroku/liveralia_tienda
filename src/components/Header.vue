@@ -304,7 +304,7 @@
                           <img class="img-fluid navbar-cart-product-image"
                             :src="$url + '/obtener_portada_producto/' + item.producto.portada" alt="..." /></a>
                         <div class="w-100">
-                          <a class="navbar-cart-product-close" href="#">
+                          <a class="navbar-cart-product-close" style="cursor:pointer" v-on:click="eliminar(item._id)">
                             <img src="/assets/icons/close.png" style="width: 15px;" />
                           </a>
                           <div class="ps-3">
@@ -388,6 +388,17 @@ export default {
     };
   },
   methods: {
+    eliminar(id){
+            axios.delete(this.$url+'/eliminar_producto_carrito/'+id,{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.$store.state.token
+                }
+            }).then((result)=>{       
+                this.init_carrito();
+                this.$socket.emit('send_cart',true);
+            });
+        },
     convertCurrency(number) {
       return currency_formatter.format(number, { code: 'PEN' });
     },
@@ -408,11 +419,12 @@ export default {
           }
         }).then((result) => {
           this.carrito_length = result.data.carrito_general.length;
+          this.total = 0;
           for (var item of result.data.carrito_general) {
             let subtotal = item.producto.precio * item.cantidad;
             this.total = this.total + subtotal;
           }
-          this.carrito = result.data.carrito;
+          this.carrito = result.data.carrito_general;
         });
       }
     },

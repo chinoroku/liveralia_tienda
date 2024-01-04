@@ -101,7 +101,7 @@
                             </div>
                         </div>
                         <div class="mb-5 d-flex justify-content-between flex-column flex-lg-row">
-                            <router-link to="/shop" class="btn btn-link text-muted" href="checkout3.html">Regresar a
+                            <router-link to="/shop" class="btn btn-link text-muted">Regresar a
                                 tienda</router-link>
                             <a class="btn btn-dark" href="checkout5.html">Place an order</a>
                         </div>
