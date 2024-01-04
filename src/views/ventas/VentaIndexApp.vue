@@ -86,7 +86,7 @@ export default {
                     'Authorization': this.$store.state.token
                 }
             }).then((result)=>{
-                console.log(result);
+               //console.log(result);
                 this.ventas = result.data;
             });
         },

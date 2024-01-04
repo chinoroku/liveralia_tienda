@@ -92,19 +92,22 @@ export default {
             this.msm_error = 'No se obtuvo el código de la dirección';
         }
 
-        this.init_payment(this.payment_id);
+        
 
-        console.log(this.venta);
-        console.log(this.detalles);
     },
     methods: {
         init_carrito(){
-            axios.get(this.$url+'/obtener_carrito_cliente',{
+            if (this.$store.state.token != null) {
+            
+            console.log('Paso por obtener Carrito',this.$store.state.token);    
+
+            axios.get(this.$url+'/obtener_carrito_cliente_venta',{
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': this.$store.state.token
                 }
-            }).then((result)=>{
+            })
+            .then((result)=>{
                 this.total = 0;
                 for(var item of result.data.carrito_general){
                     let subtotal = item.producto.precio * item.cantidad;
@@ -120,7 +123,28 @@ export default {
                 }
                 this.venta.total = this.total;
                 this.carrito = result.data.carrito_general;
-            });
+
+                console.log('ventas en carrito',this.detalles);
+                
+                this.init_payment(this.payment_id);
+            })
+            .catch((error) => {
+                if (error.response) {
+      // La solicitud se realizó y el servidor respondió con un código de estado diferente de 2xx
+      console.log('Respuesta del servidor con un error de estado:', error.response.status);
+      console.log('Datos de respuesta del servidor:', error.response.data);
+    } else if (error.request) {
+      // La solicitud se realizó pero no se recibió ninguna respuesta
+      console.error('No se recibió respuesta del servidor:', error.request);
+    } else {
+      // Algo ocurrió en la configuración de la solicitud que provocó un error
+      console.error('Error al realizar la solicitud:', error.message);
+    }
+    console.error('Error detallado:', error.config);
+             });
+
+
+            }
         },
         validar_venta(payment_id){
             axios.get(this.$url+'/validar_payment_id_venta/'+payment_id,{
@@ -138,15 +162,17 @@ export default {
         },
 
         crear_venta(){
+            console.log('Paso por crear Carrito');  
             this.venta.detalles = this.detalles;
-            console.log(this.venta);
+            console.log('Venta Detalle',this.detalles);
+           console.log('Venta Aprobada',this.venta);
             axios.post(this.$url+'/crear_venta_cliente',this.venta,{
                 headers: {
                     'Content-Type': 'application/json',
                      'Authorization': this.$store.state.token
                 }
             }).then((result)=>{
-                console.log(result);
+               //console.log(result);
                 this.$router.push({name: 'venta',params:{id:result.data._id}});
                 this.$socket.emit('send_cart',true);
             });
@@ -160,7 +186,7 @@ export default {
             }).then((result)=>{
                 this.pago = result.data;
                 if(this.pago.status == 'approved'){
-                    console.log('aprovado')
+                   //console.log('aprovado')
                     this.validar_venta(this.payment_id);
                 }else{
                     this.msm_error = 'El pago fué aprovado';

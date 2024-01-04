@@ -302,14 +302,14 @@ import { RouterLink } from 'vue-router';
         });
     },
     beforeMount() {
-        console.log(this.$route.query.subcategoria);
+       //console.log(this.$route.query.subcategoria);
         axios.get(this.$url + '/obtener_productos_shop', {
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then((result) => {
             this.productos = result.data;
-            console.log(this.productos);
+           //console.log(this.productos);
             this.productos_const = this.productos;
             if (this.$route.query.subcategoria) {
                 this.initProductosSubcategoria();
@@ -328,7 +328,7 @@ import { RouterLink } from 'vue-router';
             this.perPage = item;
         },
         setSortBy() {
-            console.log(this.sort_by);
+           //console.log(this.sort_by);
             if (this.sort_by == 'Defecto') {
                 this.productos.sort((a, b) => new Date(a.createdAt).getTime() < new Date(b.createdAt).getTime() ? 1 : -1);
             }
@@ -369,7 +369,7 @@ import { RouterLink } from 'vue-router';
             this.productos = this.productos_const.filter(item => item.categoria == this.$route.query.categoria);
         },
         selectedColor(value) {
-            console.log(value);
+           //console.log(value);
             this.productos = this.productos_const.filter(item => item.variedades.some(subitem => subitem.variedad.toLowerCase() === value.toLowerCase()));
         },
         selectedSizes(event) {

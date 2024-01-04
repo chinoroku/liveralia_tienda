@@ -245,7 +245,7 @@ export default {
       }).then((result)=>{
         this.nuevos_productos = result.data;
         this.load_nuevos_productos = false;
-        console.log(this.nuevos_productos);
+       //console.log(this.nuevos_productos);
       });
     },
     init_productos_recomendados(){
@@ -257,7 +257,7 @@ export default {
       }).then((result)=>{
         this.productos_recomendados = result.data;
         this.load_productos_recomendados = false;
-        console.log(this.productos_recomendados);
+       //console.log(this.productos_recomendados);
       });
     },
     convertCurrency(number){

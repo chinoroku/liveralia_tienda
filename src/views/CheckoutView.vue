@@ -203,7 +203,7 @@ export default {
                     'Authorization': this.$store.state.token
                 }
             }).then((result) => {
-                console.log(result);
+               //console.log(result);
                 this.direcciones = result.data;
             });
         },
@@ -247,15 +247,15 @@ export default {
         crearPreferencia() {
             let data = {
                 back_urls: {
-                    success: 'http://localhost:8081/verificacion/success/' + this.venta.direccion,
-                    pending: 'http://localhost:8081/verificacion/pending',
-                    failure: 'http://localhost:8081/verificacion/failure'
+                    success: 'http://localhost:8080/verificacion/success/' + this.venta.direccion,
+                    pending: 'http://localhost:8080/verificacion/pending',
+                    failure: 'http://localhost:8080/verificacion/failure'
                 },
                 items: this.items,
                 auto_return: 'approved'
             }
 
-            console.log(data);
+           console.log('Producto',data);
 
             axios.post('https://api.mercadopago.com/checkout/preferences', data, {
                 headers: {
@@ -263,7 +263,7 @@ export default {
                     'Authorization': 'Bearer TEST-8650513405417511-122817-fa641bdaeb2c34318220ec53db944770-498284347'
                 }
             }).then((result) => {
-                console.log(result);
+               //console.log(result);
                 window.location.href = result.data.sandbox_init_point;
 
             })

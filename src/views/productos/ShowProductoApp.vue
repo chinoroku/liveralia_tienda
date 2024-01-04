@@ -366,7 +366,7 @@ export default {
         this.variedades = result.data.variedades;
         this.galeria = result.data.galeria;
         this.init_productos_relacionados(this.producto.categoria);
-        console.log(this.galeria);
+       //console.log(this.galeria);
       });
     },
     init_productos_relacionados(categoria) {
@@ -403,7 +403,7 @@ export default {
             'Authorization': this.$store.state.token
           }
         }).then((result) => {
-          console.log(result);
+         //console.log(result);
           this.$socket.emit('send_cart', true);
           this.productos_relaciones = result.data.productos;
 

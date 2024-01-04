@@ -172,7 +172,7 @@ export default {
               'Authorization': this.$store.state.token
           }
       }).then((result)=>{
-          console.log(result);
+         //console.log(result);
           if(result.data.message){
             this.acceso = false;
           }else{

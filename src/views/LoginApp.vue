@@ -126,12 +126,12 @@ export default {
                         this.msm_error = result.data.message;
                     }else{
                         this.msm_error = '';
-                        console.log(result);
+                       //console.log(result);
                     }
                    
                 })
             }
-            console.log(this.cliente);
+           //console.log(this.cliente);
         },
 
         login(){
@@ -150,7 +150,7 @@ export default {
                         'Content-Type': 'application/json'
                     }
                 }).then((result)=>{
-                    console.log(result);
+                   //console.log(result);
 
                     if(result.data.message){
                         this.msm_error_login = result.data.message;
@@ -162,7 +162,7 @@ export default {
                     }
 
                 }).catch((error)=>{
-                    console.log(error);
+                   //console.log(error);
                 });
             }
         }
