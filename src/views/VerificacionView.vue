@@ -99,7 +99,7 @@ export default {
         init_carrito(){
             if (this.$store.state.token != null) {
             
-            console.log('Paso por obtener Carrito',this.$store.state.token);    
+           //console.log('Paso por obtener Carrito',this.$store.state.token);    
 
             axios.get(this.$url+'/obtener_carrito_cliente_venta',{
                 headers: {
@@ -124,15 +124,15 @@ export default {
                 this.venta.total = this.total;
                 this.carrito = result.data.carrito_general;
 
-                console.log('ventas en carrito',this.detalles);
+               //console.log('ventas en carrito',this.detalles);
                 
                 this.init_payment(this.payment_id);
             })
             .catch((error) => {
                 if (error.response) {
       // La solicitud se realizó y el servidor respondió con un código de estado diferente de 2xx
-      console.log('Respuesta del servidor con un error de estado:', error.response.status);
-      console.log('Datos de respuesta del servidor:', error.response.data);
+     //console.log('Respuesta del servidor con un error de estado:', error.response.status);
+     //console.log('Datos de respuesta del servidor:', error.response.data);
     } else if (error.request) {
       // La solicitud se realizó pero no se recibió ninguna respuesta
       console.error('No se recibió respuesta del servidor:', error.request);
@@ -162,10 +162,10 @@ export default {
         },
 
         crear_venta(){
-            console.log('Paso por crear Carrito');  
+           //console.log('Paso por crear Carrito');  
             this.venta.detalles = this.detalles;
-            console.log('Venta Detalle',this.detalles);
-           console.log('Venta Aprobada',this.venta);
+           //console.log('Venta Detalle',this.detalles);
+          //console.log('Venta Aprobada',this.venta);
             axios.post(this.$url+'/crear_venta_cliente',this.venta,{
                 headers: {
                     'Content-Type': 'application/json',

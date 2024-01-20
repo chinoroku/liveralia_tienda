@@ -255,7 +255,7 @@ export default {
                 auto_return: 'approved'
             }
 
-           console.log('Producto',data);
+          //console.log('Producto',data);
 
             axios.post('https://api.mercadopago.com/checkout/preferences', data, {
                 headers: {
