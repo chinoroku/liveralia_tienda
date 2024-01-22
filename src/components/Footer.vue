@@ -37,7 +37,7 @@
        <div class="row">
          <div class="col-lg-4 mb-5 mb-lg-0">
            <div class="fw-bold text-uppercase text-lg text-white mb-3">Sell<span style="color:white">.</span></div>
-           <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipisicing.</p>
+           
            <ul class="list-inline">
              <li class="list-inline-item">
                <a class="text-muted text-primary-hover" href="https://www.flaticon.es/uicons?word=facebook" target="_blank" title="Facebook">
@@ -78,7 +78,7 @@
          </div>
          <div class="col-lg-4">
            <h6 class="text-uppercase text-white mb-3">Boletín informatico</h6>
-           <p class="mb-3 text-white"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.</p>
+           
            <form action="#" id="newsletter-form">
              <div class="input-group mb-3">
                <input class="form-control bg-transparent border-secondary border-end-0" type="email" placeholder="Your Email Address" aria-label="Your Email Address" style="    border-color: #ffffff !important;color:white !important">

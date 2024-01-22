@@ -103,32 +103,50 @@
                         <div class="mb-5 d-flex justify-content-between flex-column flex-lg-row">
                             <router-link to="/shop" class="btn btn-link text-muted">Regresar a
                                 tienda</router-link>
-                            <a class="btn btn-dark" href="checkout5.html">Place an order</a>
+                            <!-- <a class="btn btn-dark" href="checkout5.html">Place an order</a> -->
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="block mb-5">
                             <div class="block-header" style="background: #fff6e8 !important">
-                                <h6 class="text-uppercase mb-0">Order Summary</h6>
+                                <h6 class="text-uppercase mb-0">Resumen del Pedido</h6>
                             </div>
                             <div class="block-body pt-1" style="background: #fff6e8 !important">
-                                <p class="text-sm">Shipping and additional costs are calculated based on values you have
-                                    entered.</p>
-                                <ul class="order-summary mb-0 list-unstyled">
-                                    <li class="order-summary-item"><span>Subtotal
-                                        </span><span>{{ convertCurrency(total) }}</span></li>
+                                <ul class="order-summary list-unstyled">
                                     <li class="order-summary-item">
                                         <span>Envio</span><span>{{ convertCurrency($envio) }}</span></li>
+                                </ul>
+                                <ul class="order-summary mb-0 list-unstyled">
+                                    <li class="order-summary-item"><span>Subtotal
+                                        </span><span>{{ convertCurrency((total+$envio)-((total + $envio)*0.18)) }}</span></li>
+                                        
+
+                                        <li class="order-summary-item"><span>I.G.V
+                                        </span><span>{{ convertCurrency((total + $envio)*0.18) }}</span></li>    
+                                    
 
                                     <li class="order-summary-item border-0"><span>Total</span><strong
                                             class="order-summary-total">{{ convertCurrency(total + $envio) }}</strong></li>
                                 </ul>
                             </div>
                         </div>
+                            <div class="block-header" style="background: #fff6e8 !important">
+                                <div class="mb-4 col-md-6 d-flex align-items-center" v-for="item in direcciones">
+                                                <input type="radio" name="shippping" id="option0" :value="item._id"
+                                                    v-on:change="selected_pago_nota($event)">
+                                                <label class="ms-3" for="option0">
+                                                    <strong class="d-block text-uppercase mb-2">Nota de Credito</strong>
+                                                </label>
+                                </div>
+                            </div>
 
                         <div class="block mb-5">
-                            <div class="block-header" style="background: #fff6e8 !important">
-                                <h6 class="text-uppercase mb-0">Método de pago</h6>
+                            <div class="block-header" style="background: #fff6e8 !important">                                
+                                <div class="mb-4 col-md-6 d-flex align-items-center" v-for="item in direcciones">
+                                            <input type="radio" name="shippping" id="option0" :value="item._id"
+                                                v-on:change="selected_pago_tarjeta($event)">
+                                                <label class="ms-3" for="option0"><strong class="d-block text-uppercase mb-2">Método de pago</strong></label>
+                                </div>
                             </div>
                             <div class="block-body pt-1 mb-3" style="background: #fff6e8 !important">
                                 <div class="col-md-12 mb-2">
@@ -157,7 +175,13 @@
                                 </div>
 
                             </div>
-                            <div class="block-footer">
+                            <div class="block-footer" v-if="metodo_pago === 1">
+                                <a class="btn btn-dark" id="btnBuy" style="cursor: pointer;width: 100%;"
+                                    v-on:click="crearPagoNotaCredito()">PAGAR</a>
+                                <!--  <button class="btn btn-dark btnBuy" style="cursor: pointer" disabled>Procesando...</button> -->
+
+                            </div>
+                            <div class="block-footer" v-if="metodo_pago === 2">
                                 <a class="btn btn-dark" id="btnBuy" style="cursor: pointer;width: 100%;"
                                     v-on:click="crearPreferencia()">PAGAR</a>
                                 <!--  <button class="btn btn-dark btnBuy" style="cursor: pointer" disabled>Procesando...</button> -->
@@ -184,8 +208,10 @@ export default {
             venta: {},
             productos: [],
             total: 0,
+            detalles: [],
             load_data: true,
-            items: []
+            items: [],
+            metodo_pago : 0,
         }
     },
     beforeMount() {
@@ -209,6 +235,13 @@ export default {
         },
         selected_direccion(event) {
             this.venta.direccion = event.target.value;
+        },
+        selected_pago_nota(event) {
+            this.metodo_pago = 1;
+            
+        },
+        selected_pago_tarjeta(event) {
+            this.metodo_pago = 2;
         },
         init_carrito() {
             if (this.$store.state.token != null) {
@@ -239,8 +272,29 @@ export default {
                         currency_id: 'PEN'
                     });
 
+                    let user_data = JSON.parse(this.$store.state.user);
+            this.venta.envio = this.$envio;
+        this.venta.cliente = user_data._id;
+
                     this.productos = result.data.carrito_general;
                     this.load_data = false;
+
+                    this.total = 0;
+                for(var item of result.data.carrito_general){
+                    let subtotal = item.producto.precio * item.cantidad;
+                    this.total = this.total+ subtotal;
+                    this.detalles.push({
+                        subtotal: subtotal,
+                        precio_unidad: item.producto.precio,
+                        cantidad: item.cantidad,
+                        cliente: this.venta.cliente,
+                        producto: item.producto._id,
+                        variedad: item.variedad._id
+                    });
+                }
+                this.venta.total = this.total;
+                this.carrito = result.data.carrito_general;
+
                 });
             }
         },
@@ -267,6 +321,21 @@ export default {
                 window.location.href = result.data.sandbox_init_point;
 
             })
+        },
+        crearPagoNotaCredito(){
+            
+            this.venta.detalles = this.detalles;
+            this.venta.transaccion = 500;
+            axios.post(this.$url+'/crear_venta_cliente',this.venta,{
+                headers: {
+                    'Content-Type': 'application/json',
+                     'Authorization': this.$store.state.token
+                }
+            }).then((result)=>{
+               //console.log(result);
+                this.$router.push({name: 'venta',params:{id:result.data._id}});
+                this.$socket.emit('send_cart',true);
+            });
         }
     }
 }

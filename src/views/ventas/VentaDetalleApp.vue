@@ -26,13 +26,13 @@
                   <ol class="breadcrumb justify-content-center">
                       <li class="breadcrumb-item"><router-link to="/">Home</router-link></li>
                       <li class="breadcrumb-item"><router-link to="/">Mis ventas</router-link></li>
-                      <li class="breadcrumb-item active">Orden #{{venta.serie.toString().padStart(6,'000000')}}</li>
+                      <li class="breadcrumb-item active">Pedido #{{venta.serie.toString().padStart(6,'000000')}}</li>
                       </ol>
                   <!-- Hero Content-->
                   <div class="hero-content pb-5 text-center">
-                    <h1 class="hero-heading">Order #{{venta.serie.toString().padStart(6,'000000')}}</h1>
+                    <h1 class="hero-heading">Pedido #{{venta.serie.toString().padStart(6,'000000')}}</h1>
                     <div class="row">   
-                      <div class="col-xl-8 offset-xl-2"><p class="lead text-muted">Order #{{venta.serie.toString().padStart(6,'000000')}} was placed on <strong>{{convertDate(venta.createdAt)}}</strong> and is currently <strong>Being prepared</strong>.</p><p class="text-muted">If you have any questions, please feel free to <a href="contact.html">contact us</a>, our customer service center is working for you 24/7.</p></div>
+                      <div class="col-xl-8 offset-xl-2"><p class="lead text-muted">Pedido #{{venta.serie.toString().padStart(6,'000000')}} Fue hecha en <strong>{{convertDate(venta.createdAt)}}</strong> y esta <strong>sien preparado</strong>.</p><p class="text-muted"></p></div>
                     </div>
                   </div>
                 </div>
@@ -94,10 +94,10 @@
                               <h6 class="text-uppercase mb-0">Detalles de orden</h6>
                             </div>
                             <div class="block-body bg-light pt-1" style="background: #fff6e8 !important">
-                              <p class="text-sm">Shipping and additional costs are calculated based on values you have entered.</p>
+                              
                               <ul class="order-summary mb-0 list-unstyled">
-                                <li class="order-summary-item"><span>Subtotal </span><span>{{convertCurrency(venta.total)}}</span></li>
-                                <li class="order-summary-item"><span>Envio</span><span>{{convertCurrency(venta.envio)}}</span></li>
+                                <li class="order-summary-item"><span>Subtotal </span><span>{{convertCurrency((venta.total+venta.envio)-((venta.total + venta.envio)*0.18))}}</span></li>
+                                <li class="order-summary-item"><span>I.G.V</span><span>{{convertCurrency(((venta.total + venta.envio)*0.18))}}</span></li>
                                 <li class="order-summary-item border-0"><span>Total</span><strong class="order-summary-total">{{convertCurrency(venta.total+venta.envio)}}</strong></li>
                               </ul>
                             </div>
@@ -108,13 +108,19 @@
                             <h6 class="text-uppercase mb-0">Cliente</h6>
                           </div>
                           <div class="block-body bg-light pt-1" style="background: #fff6e8 !important">
-                            <p>{{venta.cliente.nombres}} {{venta.cliente.apellidos}}<br>{{venta.cliente.email}}</p>
+                            <p>{{venta.cliente.nombres}} {{venta.cliente.apellidos}}<br>
+                              <strong>Correo: </strong>{{venta.cliente.email}}</p>
                           </div>
                           <div class="block-header" style="background: #fff6e8 !important">
                             <h6 class="text-uppercase mb-0">Dirección de entrega</h6>
                           </div>
                           <div class="block-body bg-light pt-1" style="background: #fff6e8 !important">
-                            <p>{{venta.direccion.nombres}} {{venta.direccion.apellidos}}<br>{{venta.direccion.telefono}}<br>{{venta.direccion.documento}}<br>{{venta.direccion.zip}} {{venta.direccion.pais}}<br>{{venta.direccion.ciudad}}<br>{{venta.direccion.direccion}}</p>
+                            <p><strong>Nombre Completo :</strong> {{venta.direccion.nombres}} {{venta.direccion.apellidos}}<br>
+                              <strong>Telefono:</strong> {{venta.direccion.telefono}}<br>
+                              <strong>Nro Documento:</strong> {{venta.direccion.documento}}<br>
+                              <strong>Zip:</strong> {{venta.direccion.zip}} {{venta.direccion.pais}}<br>
+                              <strong>Ciudad:</strong>{{venta.direccion.ciudad}}<br>
+                              <strong>Direccion:</strong> {{venta.direccion.direccion}}</p>
                           </div>
                         </div>
                       </div>
@@ -179,6 +185,8 @@ export default {
             this.venta = result.data.venta;
             this.detalles = result.data.detalles;
              this.acceso = true;
+             console.log(this.venta)
+             console.log(this.detalles)
           }
           this.load_data = false;
       });
