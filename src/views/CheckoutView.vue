@@ -131,21 +131,35 @@
                             </div>
                         </div>
                             <div class="block-header" style="background: #fff6e8 !important">
-                                <div class="mb-4 col-md-6 d-flex align-items-center" v-for="item in direcciones">
-                                                <input type="radio" name="shippping" id="option0" :value="item._id"
-                                                    v-on:change="selected_pago_nota($event)">
-                                                <label class="ms-3" for="option0">
-                                                    <strong class="d-block text-uppercase mb-2">Nota de Credito</strong>
-                                                </label>
+                                    <div class="mb-4 col-md-6 d-flex align-items-center">
+                                                    <input type="radio" name="shippping"
+                                                        v-on:change="selected_pago_nota($event)">
+                                                    <label class="ms-3">
+                                                        <strong class="d-block text-uppercase mb-2">Nota de Credito</strong>
+                                                    </label>
+                                    </div>
+
+                                    <div v-if="esNotaCreditoSeleccionada">
+                                    <input type="text" v-model="valorDeLaVariable" placeholder="Ingrese la serie">
+                                    </div>
+
+
+                                    <div class=" mb-4" v-if="msm_error">
+                                <small class="text-danger">{{msm_error}}</small>
+                                    </div>
+
                                 </div>
-                            </div>
+
+                                
+
+                            
 
                         <div class="block mb-5">
                             <div class="block-header" style="background: #fff6e8 !important">                                
-                                <div class="mb-4 col-md-6 d-flex align-items-center" v-for="item in direcciones">
-                                            <input type="radio" name="shippping" id="option0" :value="item._id"
+                                <div class="mb-4 col-md-6 d-flex align-items-center">
+                                            <input type="radio" name="shippping"
                                                 v-on:change="selected_pago_tarjeta($event)">
-                                                <label class="ms-3" for="option0"><strong class="d-block text-uppercase mb-2">Método de pago</strong></label>
+                                                <label class="ms-3"><strong class="d-block text-uppercase mb-2">Método de pago</strong></label>
                                 </div>
                             </div>
                             <div class="block-body pt-1 mb-3" style="background: #fff6e8 !important">
@@ -212,6 +226,9 @@ export default {
             load_data: true,
             items: [],
             metodo_pago : 0,
+            esNotaCreditoSeleccionada:false,
+            valorDeLaVariable:'',
+            msm_error:''
         }
     },
     beforeMount() {
@@ -235,13 +252,16 @@ export default {
         },
         selected_direccion(event) {
             this.venta.direccion = event.target.value;
+            
         },
         selected_pago_nota(event) {
             this.metodo_pago = 1;
-            
+            this.esNotaCreditoSeleccionada = event.target.checked;
         },
         selected_pago_tarjeta(event) {
             this.metodo_pago = 2;
+            this.esNotaCreditoSeleccionada = false;
+            this.valorDeLaVariable = '';
         },
         init_carrito() {
             if (this.$store.state.token != null) {
@@ -323,9 +343,22 @@ export default {
             })
         },
         crearPagoNotaCredito(){
-            
+            this.venta.transaccion = this.valorDeLaVariable;
+            axios.post(this.$url+'/obtener_nota_credito',this.venta,{
+                headers: {
+                    'Content-Type': 'application/json',
+                     'Authorization': this.$store.state.token
+                }
+            }).then((result)=>{
+                console.log(result)
+                // Verifica si se encontró una nota de crédito
+    if (result.data.notacredito && result.data.notacredito.length > 0) {
+        // Se encontró una nota de crédito, puedes hacer algo con ella
+        console.log('Nota de crédito encontrada:', result.data.notacredito);
+
             this.venta.detalles = this.detalles;
-            this.venta.transaccion = 500;
+            this.venta.notacredito = result.data.notacredito;
+            console.log(this.venta);
             axios.post(this.$url+'/crear_venta_cliente',this.venta,{
                 headers: {
                     'Content-Type': 'application/json',
@@ -336,6 +369,21 @@ export default {
                 this.$router.push({name: 'venta',params:{id:result.data._id}});
                 this.$socket.emit('send_cart',true);
             });
+
+    } else {
+        // No se encontró ninguna nota de crédito
+                this.msm_error = result.data.message;
+    }
+}).catch((error) => {
+
+    // Muestra un mensaje de error al usuario
+    this.msm_error = 'No se encontró ninguna nota de crédito.';
+
+});
+         
+
+            
+        
         }
     }
 }

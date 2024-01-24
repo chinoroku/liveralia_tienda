@@ -162,10 +162,10 @@ export default {
         },
 
         crear_venta(){
-           //console.log('Paso por crear Carrito');  
+  
             this.venta.detalles = this.detalles;
-           //console.log('Venta Detalle',this.detalles);
-          //console.log('Venta Aprobada',this.venta);
+            this.venta.notacredito = [];
+
             axios.post(this.$url+'/crear_venta_cliente',this.venta,{
                 headers: {
                     'Content-Type': 'application/json',
