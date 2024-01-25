@@ -282,17 +282,28 @@
             </div>
             <!-- Cart Dropdown-->
             <div class="nav-item dropdown">
-              <a class="navbar-icon-link d-lg-none" href="cart.html">
+              <!-- <a class="navbar-icon-link d-lg-none" href="cart.html">
                 <img src="/assets/icons/user.png" style="width: 25px;" />
                 <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">View
                   cart</span>
-              </a>
+              </a> -->
+              <router-link to="/cart" class="navbar-icon-link d-lg-none">
+              <img src="/assets/icons/user.png" style="width: 25px;" />
+              <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">View cart</span>
+            </router-link>
+
+
               <div class="d-none d-lg-block">
-                <a class="navbar-icon-link" id="cartdetails" href="cart.html" data-bs-target="#" data-bs-toggle="dropdown"
+                <!-- <a class="navbar-icon-link" id="cartdetails" href="cart.html" data-bs-target="#" data-bs-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   <img src="/assets/icons/cart.png" style="width: 25px;" />
                   <div class="navbar-icon-link-badge">{{ carrito_length }}</div>
-                </a>
+                </a> -->
+                <router-link to="/cart" class="navbar-icon-link" id="cartdetails" data-bs-target="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="/assets/icons/cart.png" style="width: 25px;" />
+                <div class="navbar-icon-link-badge">{{ carrito_length }}</div>
+              </router-link>
+
                 <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end p-4" aria-labelledby="cartdetails"
                   style="max-width: 350px !important;">
                   <div class="navbar-cart-product-wrapper"
